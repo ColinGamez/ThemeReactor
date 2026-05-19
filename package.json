@@ -1,0 +1,235 @@
+{
+  "name": "theme-reactor",
+  "displayName": "Colin's Theme Reactor",
+  "description": "Automatically switch VS Code themes by season, holiday, time of day, favorites, and workspace.",
+  "version": "0.1.0",
+  "publisher": "ColinGamez",
+  "license": "MIT",
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:theme-reactor.applySeasonalTheme",
+    "onCommand:theme-reactor.applyHolidayTheme",
+    "onCommand:theme-reactor.pickGamingTheme",
+    "onCommand:theme-reactor.pickThemeByPack",
+    "onCommand:theme-reactor.enableLightDarkAutoSwitch",
+    "onCommand:theme-reactor.enableMonthlyAutoTheme",
+    "onCommand:theme-reactor.disableMonthlyAutoTheme",
+    "onCommand:theme-reactor.applyOrangePreset",
+    "onCommand:theme-reactor.applyFocusPreset",
+    "onCommand:theme-reactor.applyLightPreset",
+    "onCommand:theme-reactor.applyGamingPreset",
+    "onCommand:theme-reactor.enableThemeReactor",
+    "onCommand:theme-reactor.disableThemeReactor",
+    "onCommand:theme-reactor.applyThemeReactorNow",
+    "onCommand:theme-reactor.pickReactorFavorite",
+    "onCommand:theme-reactor.randomReactorFavorite",
+    "onCommand:theme-reactor.configureReactorFavorites",
+    "onCommand:theme-reactor.setReactorWorkspaceTheme"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#180602",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ColinGamez/ThemeReactor.git"
+  },
+  "homepage": "https://github.com/ColinGamez/ThemeReactor#readme",
+  "bugs": {
+    "url": "https://github.com/ColinGamez/ThemeReactor/issues"
+  },
+  "scripts": {
+    "build": "node scripts/check-package.mjs"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "keywords": [
+    "theme switcher",
+    "auto theme",
+    "seasonal themes",
+    "holiday themes",
+    "time of day",
+    "favorites",
+    "workspace theme",
+    "vs code"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "theme-reactor.applySeasonalTheme",
+        "title": "Apply Current Seasonal Theme",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyHolidayTheme",
+        "title": "Apply Current Holiday Theme",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.pickGamingTheme",
+        "title": "Pick Gaming Theme",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.pickThemeByPack",
+        "title": "Pick Theme By Pack",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.enableLightDarkAutoSwitch",
+        "title": "Enable Light/Dark Auto Switch",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.enableMonthlyAutoTheme",
+        "title": "Enable Startup Seasonal Auto Theme",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.disableMonthlyAutoTheme",
+        "title": "Disable Startup Seasonal Auto Theme",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyOrangePreset",
+        "title": "Apply Orange Coding Preset",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyFocusPreset",
+        "title": "Apply Focus Preset",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyLightPreset",
+        "title": "Apply Light Coding Preset",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyGamingPreset",
+        "title": "Apply Gaming Preset",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.enableThemeReactor",
+        "title": "Enable Theme Reactor",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.disableThemeReactor",
+        "title": "Disable Theme Reactor",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.applyThemeReactorNow",
+        "title": "Apply Theme Reactor Now",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.pickReactorFavorite",
+        "title": "Pick Theme Reactor Favorite",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.randomReactorFavorite",
+        "title": "Random Theme Reactor Favorite",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.configureReactorFavorites",
+        "title": "Configure Theme Reactor Favorites",
+        "category": "Colin's Theme Reactor"
+      },
+      {
+        "command": "theme-reactor.setReactorWorkspaceTheme",
+        "title": "Set Theme Reactor Workspace Theme",
+        "category": "Colin's Theme Reactor"
+      }
+    ],
+    "configuration": {
+      "title": "Colin's Theme Reactor",
+      "properties": {
+        "themeReactor.autoApplyOnStartup": {
+          "type": "boolean",
+          "default": false,
+          "description": "Apply a seasonal or holiday theme when VS Code starts."
+        },
+        "themeReactor.autoMode": {
+          "type": "string",
+          "enum": [
+            "seasonal",
+            "holiday"
+          ],
+          "default": "seasonal",
+          "description": "Controls which automatic theme rotation is used on startup."
+        },
+        "themeReactor.reactor.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically apply Theme Reactor when VS Code starts and while VS Code is open."
+        },
+        "themeReactor.reactor.mode": {
+          "type": "string",
+          "enum": [
+            "hybrid",
+            "timeOfDay",
+            "seasonal",
+            "holiday"
+          ],
+          "enumDescriptions": [
+            "Use holiday themes in holiday months and time-of-day themes otherwise.",
+            "Use the morning, day, evening, and night schedule.",
+            "Use Spring Bloom, Summer Sunset, Autumn Ember, or Winter Aurora by month.",
+            "Use holiday themes when available, with seasonal fallback."
+          ],
+          "default": "hybrid",
+          "description": "Controls how Theme Reactor chooses a theme."
+        },
+        "themeReactor.reactor.schedule": {
+          "type": "object",
+          "default": {
+            "morning": "Spring Bloom",
+            "day": "Peach Soda",
+            "evening": "Summer Sunset",
+            "night": "All Orange"
+          },
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Theme Reactor time-of-day schedule. Supported keys: morning, day, evening, night."
+        },
+        "themeReactor.reactor.favorites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "All Orange",
+            "All Orange High Contrast",
+            "Summer Sunset",
+            "Autumn Ember",
+            "Winter Aurora",
+            "Starfighter HUD"
+          ],
+          "description": "Themes used by Theme Reactor favorite and random commands."
+        },
+        "themeReactor.reactor.workspaceTheme": {
+          "type": "string",
+          "default": "",
+          "description": "Workspace-specific Theme Reactor override. Leave empty to use the normal Theme Reactor mode."
+        }
+      }
+    }
+  }
+}
