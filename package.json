@@ -1,26 +1,16 @@
 {
   "name": "colins-theme-switcher",
   "displayName": "Colin's Theme Switcher",
-  "description": "Switch VS Code themes by season, holiday, time of day, favorites, and workspace.",
-  "version": "0.1.1",
+  "description": "Pick and apply VS Code themes by season, holiday, time of day, favorites, and workspace.",
+  "version": "0.1.2",
   "publisher": "ColinGamez",
   "license": "MIT",
   "main": "./extension.js",
   "activationEvents": [
-    "onStartupFinished",
     "onCommand:colins-theme-switcher.applySeasonalTheme",
     "onCommand:colins-theme-switcher.applyHolidayTheme",
     "onCommand:colins-theme-switcher.pickGamingTheme",
     "onCommand:colins-theme-switcher.pickThemeByPack",
-    "onCommand:colins-theme-switcher.enableLightDarkAutoSwitch",
-    "onCommand:colins-theme-switcher.enableMonthlyAutoTheme",
-    "onCommand:colins-theme-switcher.disableMonthlyAutoTheme",
-    "onCommand:colins-theme-switcher.applyOrangePreset",
-    "onCommand:colins-theme-switcher.applyFocusPreset",
-    "onCommand:colins-theme-switcher.applyLightPreset",
-    "onCommand:colins-theme-switcher.applyGamingPreset",
-    "onCommand:colins-theme-switcher.enableThemeSwitcher",
-    "onCommand:colins-theme-switcher.disableThemeSwitcher",
     "onCommand:colins-theme-switcher.applyThemeSwitcherNow",
     "onCommand:colins-theme-switcher.pickSwitcherFavorite",
     "onCommand:colins-theme-switcher.randomSwitcherFavorite",
@@ -78,51 +68,6 @@
         "category": "Colin's Theme Switcher"
       },
       {
-        "command": "colins-theme-switcher.enableLightDarkAutoSwitch",
-        "title": "Enable Light/Dark Auto Switch",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.enableMonthlyAutoTheme",
-        "title": "Enable Startup Seasonal Auto Theme",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.disableMonthlyAutoTheme",
-        "title": "Disable Startup Seasonal Auto Theme",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyOrangePreset",
-        "title": "Apply Orange Coding Preset",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyFocusPreset",
-        "title": "Apply Focus Preset",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyLightPreset",
-        "title": "Apply Light Coding Preset",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyGamingPreset",
-        "title": "Apply Gaming Preset",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.enableThemeSwitcher",
-        "title": "Enable Theme Switcher",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.disableThemeSwitcher",
-        "title": "Disable Theme Switcher",
-        "category": "Colin's Theme Switcher"
-      },
-      {
         "command": "colins-theme-switcher.applyThemeSwitcherNow",
         "title": "Apply Theme Switcher Now",
         "category": "Colin's Theme Switcher"
@@ -151,26 +96,7 @@
     "configuration": {
       "title": "Colin's Theme Switcher",
       "properties": {
-        "colinsThemeSwitcher.autoApplyOnStartup": {
-          "type": "boolean",
-          "default": false,
-          "description": "Apply a seasonal or holiday theme when VS Code starts."
-        },
-        "colinsThemeSwitcher.autoMode": {
-          "type": "string",
-          "enum": [
-            "seasonal",
-            "holiday"
-          ],
-          "default": "seasonal",
-          "description": "Controls which automatic theme rotation is used on startup."
-        },
-        "colinsThemeSwitcher.switcher.enabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "Automatically apply Theme Switcher when VS Code starts and while VS Code is open."
-        },
-        "colinsThemeSwitcher.switcher.mode": {
+        "colinsThemeSwitcher.mode": {
           "type": "string",
           "enum": [
             "hybrid",
@@ -185,9 +111,9 @@
             "Use holiday themes when available, with seasonal fallback."
           ],
           "default": "hybrid",
-          "description": "Controls how Theme Switcher chooses a theme."
+          "description": "Controls how Theme Switcher chooses a theme when Apply Theme Switcher Now is run."
         },
-        "colinsThemeSwitcher.switcher.schedule": {
+        "colinsThemeSwitcher.schedule": {
           "type": "object",
           "default": {
             "morning": "Spring Bloom",
@@ -200,7 +126,7 @@
           },
           "description": "Theme Switcher time-of-day schedule. Supported keys: morning, day, evening, night."
         },
-        "colinsThemeSwitcher.switcher.favorites": {
+        "colinsThemeSwitcher.favorites": {
           "type": "array",
           "items": {
             "type": "string"
@@ -215,7 +141,7 @@
           ],
           "description": "Themes used by Theme Switcher favorite and random commands."
         },
-        "colinsThemeSwitcher.switcher.workspaceTheme": {
+        "colinsThemeSwitcher.workspaceTheme": {
           "type": "string",
           "default": "",
           "description": "Workspace-specific Theme Switcher override. Leave empty to use the normal Theme Switcher mode."

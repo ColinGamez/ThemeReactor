@@ -1,21 +1,20 @@
 # Colin's Theme Switcher
 
-Theme Switcher automatically switches VS Code themes by season, holiday month, time of day, random favorites, and workspace overrides.
+Pick and apply VS Code themes from a command-driven switcher. It can choose seasonal, holiday, time-of-day, favorite, random, and workspace-specific theme picks.
 
-It works with any installed VS Code theme names. It is tuned out of the box for **Colin's VS Code Themes**, so install that theme pack too if you want the default rotations to light up exactly as designed.
+It works with any installed VS Code theme names. The defaults are tuned for **Colin's VS Code Themes**.
 
 ## Features
 
 - Apply current seasonal or holiday themes.
-- Enable startup auto-theme switching.
-- Enable a hybrid Theme Switcher that changes while VS Code is open.
+- Pick a theme by pack.
+- Apply the current Theme Switcher pick from your configured mode.
 - Pick, randomize, and configure favorite themes.
 - Set a workspace-specific theme override.
-- Apply coding presets for orange, focus, light, and gaming setups.
 
 ## Usage
 
-Run **Colin's Theme Switcher: Enable Theme Switcher** from the Command Palette, then adjust settings under `colinsThemeSwitcher.*` if you want custom theme names.
+Run **Colin's Theme Switcher: Apply Theme Switcher Now** from the Command Palette, then adjust settings under `colinsThemeSwitcher.*` if you want custom theme names.
 
 ## Local Development
 

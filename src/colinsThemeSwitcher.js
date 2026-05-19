@@ -1,14 +1,13 @@
 const vscode = require("vscode");
 const { PACKS, ALL_THEMES } = require("./themeData");
-const { runExtensionTask } = require("./utils");
 
-const DEFAULT_REACTOR_SCHEDULE = {
+const DEFAULT_SWITCHER_SCHEDULE = {
   morning: "Spring Bloom",
   day: "Peach Soda",
   evening: "Summer Sunset",
   night: "All Orange"
 };
-const DEFAULT_REACTOR_FAVORITES = [
+const DEFAULT_SWITCHER_FAVORITES = [
   "All Orange",
   "All Orange High Contrast",
   "Summer Sunset",
@@ -16,7 +15,6 @@ const DEFAULT_REACTOR_FAVORITES = [
   "Winter Aurora",
   "Starfighter HUD"
 ];
-const REACTOR_INTERVAL_MS = 5 * 60 * 1000;
 
 function monthTheme(date = new Date()) {
   const month = date.getMonth() + 1;
@@ -87,37 +85,40 @@ function safeThemeList(themes, fallback = ALL_THEMES) {
   }
 
   const normalized = themes.filter((theme) => typeof theme === "string" && theme.trim());
-  return normalized.length > 0 ? [...new Set(normalized)] : fallback;
+  return normalized.length ? [...new Set(normalized)] : fallback;
 }
 
-function switcherSchedule(config) {
-  const schedule = config.get("switcher.schedule", {});
+function themeSwitcherConfig() {
+  return vscode.workspace.getConfiguration("colinsThemeSwitcher");
+}
+
+function switcherSchedule(config = themeSwitcherConfig()) {
+  const schedule = config.get("schedule", {});
 
   if (!schedule || typeof schedule !== "object" || Array.isArray(schedule)) {
-    return DEFAULT_REACTOR_SCHEDULE;
+    return DEFAULT_SWITCHER_SCHEDULE;
   }
 
-  return { ...DEFAULT_REACTOR_SCHEDULE, ...schedule };
+  return { ...DEFAULT_SWITCHER_SCHEDULE, ...schedule };
 }
 
-function switcherFavorites(config) {
-  return safeThemeList(config.get("switcher.favorites", DEFAULT_REACTOR_FAVORITES), DEFAULT_REACTOR_FAVORITES);
+function switcherFavorites(config = themeSwitcherConfig()) {
+  return safeThemeList(config.get("favorites", DEFAULT_SWITCHER_FAVORITES), DEFAULT_SWITCHER_FAVORITES);
 }
 
-function switcherTimeTheme(date = new Date()) {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  const schedule = switcherSchedule(config);
+function timeTheme(date = new Date()) {
+  const schedule = switcherSchedule();
   const bucket = timeBucket(date);
 
   return {
-    label: schedule[bucket.key] || DEFAULT_REACTOR_SCHEDULE[bucket.key],
+    label: schedule[bucket.key] || DEFAULT_SWITCHER_SCHEDULE[bucket.key],
     detail: `${bucket.detail} schedule`
   };
 }
 
-function switcherThemeForDate(date = new Date()) {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  const rawWorkspaceTheme = config.get("switcher.workspaceTheme", "");
+function themeForDate(date = new Date()) {
+  const config = themeSwitcherConfig();
+  const rawWorkspaceTheme = config.get("workspaceTheme", "");
   const workspaceTheme = typeof rawWorkspaceTheme === "string" ? rawWorkspaceTheme.trim() : "";
 
   if (workspaceTheme) {
@@ -128,7 +129,7 @@ function switcherThemeForDate(date = new Date()) {
     };
   }
 
-  const mode = config.get("switcher.mode", "hybrid");
+  const mode = config.get("mode", "hybrid");
 
   if (mode === "seasonal") {
     return monthTheme(date);
@@ -139,10 +140,10 @@ function switcherThemeForDate(date = new Date()) {
   }
 
   if (mode === "timeOfDay") {
-    return switcherTimeTheme(date);
+    return timeTheme(date);
   }
 
-  return isHolidayMonth(date) ? holidayTheme(date) : switcherTimeTheme(date);
+  return isHolidayMonth(date) ? holidayTheme(date) : timeTheme(date);
 }
 
 async function setTheme(label, detail, options = {}) {
@@ -150,76 +151,13 @@ async function setTheme(label, detail, options = {}) {
   const target = options.target ?? vscode.ConfigurationTarget.Global;
 
   if (currentTheme === label && !options.force) {
-    if (!options.silent) {
-      vscode.window.showInformationMessage(`Colin's Theme Switcher: ${label} is already active.`);
-    }
-
+    vscode.window.showInformationMessage(`Colin's Theme Switcher: ${label} is already active.`);
     return false;
   }
 
-  await vscode.workspace
-    .getConfiguration("workbench")
-    .update("colorTheme", label, target);
-
-  if (!options.silent) {
-    vscode.window.showInformationMessage(`Colin's Theme Switcher: switched to ${label}${detail ? ` (${detail})` : ""}.`);
-  }
-
+  await vscode.workspace.getConfiguration("workbench").update("colorTheme", label, target);
+  vscode.window.showInformationMessage(`Colin's Theme Switcher: switched to ${label}${detail ? ` (${detail})` : ""}.`);
   return true;
-}
-
-async function updateGlobal(section, key, value) {
-  await vscode.workspace
-    .getConfiguration(section)
-    .update(key, value, vscode.ConfigurationTarget.Global);
-}
-
-async function applySettingsPreset({ name, theme, minimap, renderWhitespace }) {
-  await updateGlobal("workbench", "colorTheme", theme);
-  await updateGlobal("workbench", "iconTheme", "colins-color-icons");
-  await updateGlobal("editor", "fontLigatures", true);
-  await updateGlobal("editor", "minimap.enabled", minimap);
-  await updateGlobal("editor", "bracketPairColorization.enabled", true);
-  await updateGlobal("editor", "guides.bracketPairs", "active");
-  await updateGlobal("editor", "smoothScrolling", true);
-  await updateGlobal("editor", "renderWhitespace", renderWhitespace);
-  vscode.window.showInformationMessage(`Colin's Theme Switcher: applied ${name}.`);
-}
-
-async function applyOrangePreset() {
-  await applySettingsPreset({
-    name: "Orange Coding Preset",
-    theme: "All Orange",
-    minimap: true,
-    renderWhitespace: "selection"
-  });
-}
-
-async function applyFocusPreset() {
-  await applySettingsPreset({
-    name: "Focus Preset",
-    theme: "All Orange High Contrast",
-    minimap: false,
-    renderWhitespace: "boundary"
-  });
-}
-
-async function applyLightPreset() {
-  await applySettingsPreset({
-    name: "Light Coding Preset",
-    theme: "Spring Bloom",
-    minimap: false,
-    renderWhitespace: "selection"
-  });
-}
-
-async function applyGamingPreset() {
-  await applySettingsPreset({
-    name: "Gaming Preset",
-    theme: "Starfighter HUD",
-    minimap: true,
-    renderWhitespace: "none"
-  });
 }
 
 async function applySeasonalTheme() {
@@ -255,83 +193,15 @@ async function pickThemeByPack() {
   }
 }
 
-async function enableLightDarkAutoSwitch() {
-  await vscode.workspace
-    .getConfiguration("window")
-    .update("autoDetectColorScheme", true, vscode.ConfigurationTarget.Global);
-  await vscode.workspace
-    .getConfiguration("workbench")
-    .update("preferredLightColorTheme", "Spring Bloom", vscode.ConfigurationTarget.Global);
-  await vscode.workspace
-    .getConfiguration("workbench")
-    .update("preferredDarkColorTheme", "All Orange", vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Switcher: enabled VS Code light/dark auto switching.");
-}
-
-async function enableMonthlyAutoTheme() {
-  await vscode.workspace
-    .getConfiguration("colinsThemeSwitcher")
-    .update("autoApplyOnStartup", true, vscode.ConfigurationTarget.Global);
-  await vscode.workspace
-    .getConfiguration("colinsThemeSwitcher")
-    .update("autoMode", "seasonal", vscode.ConfigurationTarget.Global);
-  await applySeasonalTheme();
-}
-
-async function disableMonthlyAutoTheme() {
-  await vscode.workspace
-    .getConfiguration("colinsThemeSwitcher")
-    .update("autoApplyOnStartup", false, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Switcher: startup auto theme is off.");
-}
-
-async function applyThemeSwitcher(options = {}) {
-  const theme = switcherThemeForDate();
-  return setTheme(theme.label, `Theme Switcher ${theme.detail}`, {
-    ...options,
-    target: theme.target ?? options.target
+async function applyThemeSwitcherNow() {
+  const theme = themeForDate();
+  await setTheme(theme.label, `Theme Switcher ${theme.detail}`, {
+    target: theme.target
   });
 }
 
-async function applyThemeSwitcherIfEnabled(options = {}) {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-
-  if (!config.get("switcher.enabled", false)) {
-    return false;
-  }
-
-  return applyThemeSwitcher(options);
-}
-
-async function enableThemeSwitcher() {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  await config.update("switcher.enabled", true, vscode.ConfigurationTarget.Global);
-
-  if (!config.get("switcher.mode")) {
-    await config.update("switcher.mode", "hybrid", vscode.ConfigurationTarget.Global);
-  }
-
-  const changed = await applyThemeSwitcher({ silent: true });
-  const theme = switcherThemeForDate();
-  vscode.window.showInformationMessage(
-    `Colin's Theme Switcher is on: ${theme.label}${changed ? "" : " was already active"}.`
-  );
-}
-
-async function disableThemeSwitcher() {
-  await vscode.workspace
-    .getConfiguration("colinsThemeSwitcher")
-    .update("switcher.enabled", false, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Switcher is off.");
-}
-
-async function applyThemeSwitcherNow() {
-  await applyThemeSwitcher();
-}
-
 async function pickSwitcherFavorite() {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  const themes = switcherFavorites(config);
+  const themes = switcherFavorites();
   const choice = await vscode.window.showQuickPick(
     themes.map((label) => ({ label, description: "Theme Switcher favorite" })),
     { title: "Pick a Theme Switcher favorite", placeHolder: "Choose a favorite theme" }
@@ -343,15 +213,13 @@ async function pickSwitcherFavorite() {
 }
 
 async function randomSwitcherFavorite() {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  const themes = switcherFavorites(config);
+  const themes = switcherFavorites();
   const label = themes[Math.floor(Math.random() * themes.length)];
   await setTheme(label, "Theme Switcher random favorite");
 }
 
 async function configureSwitcherFavorites() {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-  const favorites = new Set(switcherFavorites(config));
+  const favorites = new Set(switcherFavorites());
   const choices = await vscode.window.showQuickPick(
     ALL_THEMES.map((label) => ({
       label,
@@ -368,8 +236,8 @@ async function configureSwitcherFavorites() {
     return;
   }
 
-  await config.update(
-    "switcher.favorites",
+  await themeSwitcherConfig().update(
+    "favorites",
     choices.map((choice) => choice.label),
     vscode.ConfigurationTarget.Global
   );
@@ -395,9 +263,7 @@ async function setSwitcherWorkspaceTheme() {
     return;
   }
 
-  await vscode.workspace
-    .getConfiguration("colinsThemeSwitcher")
-    .update("switcher.workspaceTheme", choice.theme, vscode.ConfigurationTarget.Workspace);
+  await themeSwitcherConfig().update("workspaceTheme", choice.theme, vscode.ConfigurationTarget.Workspace);
 
   if (!choice.theme) {
     vscode.window.showInformationMessage("Colin's Theme Switcher: cleared this workspace theme.");
@@ -410,68 +276,18 @@ async function setSwitcherWorkspaceTheme() {
   });
 }
 
-async function applyConfiguredStartupTheme() {
-  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
-
-  if (config.get("switcher.enabled", false)) {
-    await applyThemeSwitcher({ silent: true });
-    return;
-  }
-
-  if (!config.get("autoApplyOnStartup")) {
-    return;
-  }
-
-  if (config.get("autoMode") === "holiday") {
-    await applyHolidayTheme();
-    return;
-  }
-
-  await applySeasonalTheme();
-}
-
-function watchThemeSwitcher(context) {
-  const timer = setInterval(() => {
-    runExtensionTask(applyThemeSwitcherIfEnabled({ silent: true }), "Theme Switcher interval update");
-  }, REACTOR_INTERVAL_MS);
-
-  context.subscriptions.push({ dispose: () => clearInterval(timer) });
-  context.subscriptions.push(
-    vscode.workspace.onDidChangeConfiguration((event) => {
-      if (event.affectsConfiguration("colinsThemeSwitcher.switcher")) {
-        runExtensionTask(applyThemeSwitcherIfEnabled({ silent: true }), "Theme Switcher configuration update");
-      }
-    })
-  );
-}
-
 function registerThemeSwitcher(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("colins-theme-switcher.applySeasonalTheme", applySeasonalTheme),
     vscode.commands.registerCommand("colins-theme-switcher.applyHolidayTheme", applyHolidayTheme),
     vscode.commands.registerCommand("colins-theme-switcher.pickGamingTheme", () => pickThemeFromPack("Gaming")),
     vscode.commands.registerCommand("colins-theme-switcher.pickThemeByPack", pickThemeByPack),
-    vscode.commands.registerCommand("colins-theme-switcher.enableLightDarkAutoSwitch", enableLightDarkAutoSwitch),
-    vscode.commands.registerCommand("colins-theme-switcher.enableMonthlyAutoTheme", enableMonthlyAutoTheme),
-    vscode.commands.registerCommand("colins-theme-switcher.disableMonthlyAutoTheme", disableMonthlyAutoTheme),
-    vscode.commands.registerCommand("colins-theme-switcher.applyOrangePreset", applyOrangePreset),
-    vscode.commands.registerCommand("colins-theme-switcher.applyFocusPreset", applyFocusPreset),
-    vscode.commands.registerCommand("colins-theme-switcher.applyLightPreset", applyLightPreset),
-    vscode.commands.registerCommand("colins-theme-switcher.applyGamingPreset", applyGamingPreset),
-    vscode.commands.registerCommand("colins-theme-switcher.enableThemeSwitcher", enableThemeSwitcher),
-    vscode.commands.registerCommand("colins-theme-switcher.disableThemeSwitcher", disableThemeSwitcher),
     vscode.commands.registerCommand("colins-theme-switcher.applyThemeSwitcherNow", applyThemeSwitcherNow),
     vscode.commands.registerCommand("colins-theme-switcher.pickSwitcherFavorite", pickSwitcherFavorite),
     vscode.commands.registerCommand("colins-theme-switcher.randomSwitcherFavorite", randomSwitcherFavorite),
     vscode.commands.registerCommand("colins-theme-switcher.configureSwitcherFavorites", configureSwitcherFavorites),
     vscode.commands.registerCommand("colins-theme-switcher.setSwitcherWorkspaceTheme", setSwitcherWorkspaceTheme)
   );
-
-  watchThemeSwitcher(context);
-
-  setTimeout(() => {
-    runExtensionTask(applyConfiguredStartupTheme(), "startup theme apply");
-  }, 1200);
 }
 
 module.exports = { registerThemeSwitcher };

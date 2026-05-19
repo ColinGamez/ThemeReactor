@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Changed the Marketplace release to command-driven theme switching only.
+- Removed startup activation and background switching from the standalone package.
+
 ## 0.1.1
 
 - Renamed the Marketplace-facing package to Colin's Theme Switcher to avoid Marketplace metadata filtering.
