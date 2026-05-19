@@ -1,20 +1,14 @@
 # Colin's Theme Switcher
 
-Pick and apply VS Code themes from a command-driven switcher. It can choose seasonal, holiday, time-of-day, favorite, random, and workspace-specific theme picks.
+A companion Marketplace entry for the Theme Reactor workflow inside **Colin's VS Code Themes**. Installing this pack installs the main theme extension, which includes seasonal, holiday, gaming, favorite, and workspace theme-switching commands.
 
-It works with any installed VS Code theme names. The defaults are tuned for **Colin's VS Code Themes**.
+## Included Extension
 
-## Features
-
-- Apply current seasonal or holiday themes.
-- Pick a theme by pack.
-- Apply the current Theme Switcher pick from your configured mode.
-- Pick, randomize, and configure favorite themes.
-- Set a workspace-specific theme override.
+- **Colin's VS Code Themes**: 32 color themes, Colin's Color Icons, and Theme Reactor commands.
 
 ## Usage
 
-Run **Colin's Theme Switcher: Apply Theme Switcher Now** from the Command Palette, then adjust settings under `colinsThemeSwitcher.*` if you want custom theme names.
+After install, open the Command Palette and run commands from **Colin's Themes**, including **Apply Theme Reactor Now**, **Pick Theme Reactor Favorite**, and **Set Theme Reactor Workspace Theme**.
 
 ## Local Development
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- Changed the Marketplace package to a no-code extension pack that installs Colin's VS Code Themes.
+- Kept the Theme Reactor source in this repository for a future Marketplace support review.
+
 ## 0.1.2
 
 - Changed the Marketplace release to command-driven theme switching only.

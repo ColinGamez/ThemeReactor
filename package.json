@@ -1,25 +1,10 @@
 {
   "name": "colins-theme-switcher",
   "displayName": "Colin's Theme Switcher",
-  "description": "Pick and apply VS Code themes by season, holiday, time of day, favorites, and workspace.",
-  "version": "0.1.2",
+  "description": "Installs Colin's VS Code Themes, including the Theme Reactor and theme-switching commands.",
+  "version": "0.1.3",
   "publisher": "ColinGamez",
   "license": "MIT",
-  "main": "./extension.js",
-  "activationEvents": [
-    "onCommand:colins-theme-switcher.applySeasonalTheme",
-    "onCommand:colins-theme-switcher.applyHolidayTheme",
-    "onCommand:colins-theme-switcher.pickGamingTheme",
-    "onCommand:colins-theme-switcher.pickThemeByPack",
-    "onCommand:colins-theme-switcher.applyThemeSwitcherNow",
-    "onCommand:colins-theme-switcher.pickSwitcherFavorite",
-    "onCommand:colins-theme-switcher.randomSwitcherFavorite",
-    "onCommand:colins-theme-switcher.configureSwitcherFavorites",
-    "onCommand:colins-theme-switcher.setSwitcherWorkspaceTheme"
-  ],
-  "extensionKind": [
-    "ui"
-  ],
   "icon": "assets/icon.png",
   "galleryBanner": {
     "color": "#180602",
@@ -33,120 +18,17 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other"
+    "Extension Packs"
   ],
   "keywords": [
+    "extension pack",
     "theme switcher",
-    "theme picker",
+    "theme pack",
+    "orange theme",
     "seasonal theme",
-    "holiday theme",
-    "time of day",
-    "favorites",
-    "workspace theme",
     "vs code"
   ],
-  "contributes": {
-    "commands": [
-      {
-        "command": "colins-theme-switcher.applySeasonalTheme",
-        "title": "Apply Current Seasonal Theme",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyHolidayTheme",
-        "title": "Apply Current Holiday Theme",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.pickGamingTheme",
-        "title": "Pick Gaming Theme",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.pickThemeByPack",
-        "title": "Pick Theme By Pack",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.applyThemeSwitcherNow",
-        "title": "Apply Theme Switcher Now",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.pickSwitcherFavorite",
-        "title": "Pick Theme Switcher Favorite",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.randomSwitcherFavorite",
-        "title": "Random Theme Switcher Favorite",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.configureSwitcherFavorites",
-        "title": "Configure Theme Switcher Favorites",
-        "category": "Colin's Theme Switcher"
-      },
-      {
-        "command": "colins-theme-switcher.setSwitcherWorkspaceTheme",
-        "title": "Set Theme Switcher Workspace Theme",
-        "category": "Colin's Theme Switcher"
-      }
-    ],
-    "configuration": {
-      "title": "Colin's Theme Switcher",
-      "properties": {
-        "colinsThemeSwitcher.mode": {
-          "type": "string",
-          "enum": [
-            "hybrid",
-            "timeOfDay",
-            "seasonal",
-            "holiday"
-          ],
-          "enumDescriptions": [
-            "Use holiday themes in holiday months and time-of-day themes otherwise.",
-            "Use the morning, day, evening, and night schedule.",
-            "Use Spring Bloom, Summer Sunset, Autumn Ember, or Winter Aurora by month.",
-            "Use holiday themes when available, with seasonal fallback."
-          ],
-          "default": "hybrid",
-          "description": "Controls how Theme Switcher chooses a theme when Apply Theme Switcher Now is run."
-        },
-        "colinsThemeSwitcher.schedule": {
-          "type": "object",
-          "default": {
-            "morning": "Spring Bloom",
-            "day": "Peach Soda",
-            "evening": "Summer Sunset",
-            "night": "All Orange"
-          },
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Theme Switcher time-of-day schedule. Supported keys: morning, day, evening, night."
-        },
-        "colinsThemeSwitcher.favorites": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "All Orange",
-            "All Orange High Contrast",
-            "Summer Sunset",
-            "Autumn Ember",
-            "Winter Aurora",
-            "Starfighter HUD"
-          ],
-          "description": "Themes used by Theme Switcher favorite and random commands."
-        },
-        "colinsThemeSwitcher.workspaceTheme": {
-          "type": "string",
-          "default": "",
-          "description": "Workspace-specific Theme Switcher override. Leave empty to use the normal Theme Switcher mode."
-        }
-      }
-    }
-  }
+  "extensionPack": [
+    "ColinGamez.my-vsc-themes"
+  ]
 }
