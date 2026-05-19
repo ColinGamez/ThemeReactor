@@ -1,31 +1,31 @@
 {
-  "name": "theme-reactor",
-  "displayName": "Colin's Theme Reactor",
-  "description": "Automatically switch VS Code themes by season, holiday, time of day, favorites, and workspace.",
-  "version": "0.1.0",
+  "name": "colins-theme-switcher",
+  "displayName": "Colin's Theme Switcher",
+  "description": "Switch VS Code themes by season, holiday, time of day, favorites, and workspace.",
+  "version": "0.1.1",
   "publisher": "ColinGamez",
   "license": "MIT",
   "main": "./extension.js",
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:theme-reactor.applySeasonalTheme",
-    "onCommand:theme-reactor.applyHolidayTheme",
-    "onCommand:theme-reactor.pickGamingTheme",
-    "onCommand:theme-reactor.pickThemeByPack",
-    "onCommand:theme-reactor.enableLightDarkAutoSwitch",
-    "onCommand:theme-reactor.enableMonthlyAutoTheme",
-    "onCommand:theme-reactor.disableMonthlyAutoTheme",
-    "onCommand:theme-reactor.applyOrangePreset",
-    "onCommand:theme-reactor.applyFocusPreset",
-    "onCommand:theme-reactor.applyLightPreset",
-    "onCommand:theme-reactor.applyGamingPreset",
-    "onCommand:theme-reactor.enableThemeReactor",
-    "onCommand:theme-reactor.disableThemeReactor",
-    "onCommand:theme-reactor.applyThemeReactorNow",
-    "onCommand:theme-reactor.pickReactorFavorite",
-    "onCommand:theme-reactor.randomReactorFavorite",
-    "onCommand:theme-reactor.configureReactorFavorites",
-    "onCommand:theme-reactor.setReactorWorkspaceTheme"
+    "onCommand:colins-theme-switcher.applySeasonalTheme",
+    "onCommand:colins-theme-switcher.applyHolidayTheme",
+    "onCommand:colins-theme-switcher.pickGamingTheme",
+    "onCommand:colins-theme-switcher.pickThemeByPack",
+    "onCommand:colins-theme-switcher.enableLightDarkAutoSwitch",
+    "onCommand:colins-theme-switcher.enableMonthlyAutoTheme",
+    "onCommand:colins-theme-switcher.disableMonthlyAutoTheme",
+    "onCommand:colins-theme-switcher.applyOrangePreset",
+    "onCommand:colins-theme-switcher.applyFocusPreset",
+    "onCommand:colins-theme-switcher.applyLightPreset",
+    "onCommand:colins-theme-switcher.applyGamingPreset",
+    "onCommand:colins-theme-switcher.enableThemeSwitcher",
+    "onCommand:colins-theme-switcher.disableThemeSwitcher",
+    "onCommand:colins-theme-switcher.applyThemeSwitcherNow",
+    "onCommand:colins-theme-switcher.pickSwitcherFavorite",
+    "onCommand:colins-theme-switcher.randomSwitcherFavorite",
+    "onCommand:colins-theme-switcher.configureSwitcherFavorites",
+    "onCommand:colins-theme-switcher.setSwitcherWorkspaceTheme"
   ],
   "extensionKind": [
     "ui"
@@ -36,14 +36,6 @@
     "theme": "dark"
   },
   "pricing": "Free",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ColinGamez/ThemeReactor.git"
-  },
-  "homepage": "https://github.com/ColinGamez/ThemeReactor#readme",
-  "bugs": {
-    "url": "https://github.com/ColinGamez/ThemeReactor/issues"
-  },
   "scripts": {
     "build": "node scripts/check-package.mjs"
   },
@@ -51,14 +43,13 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Themes",
     "Other"
   ],
   "keywords": [
     "theme switcher",
-    "auto theme",
-    "seasonal themes",
-    "holiday themes",
+    "theme picker",
+    "seasonal theme",
+    "holiday theme",
     "time of day",
     "favorites",
     "workspace theme",
@@ -67,105 +58,105 @@
   "contributes": {
     "commands": [
       {
-        "command": "theme-reactor.applySeasonalTheme",
+        "command": "colins-theme-switcher.applySeasonalTheme",
         "title": "Apply Current Seasonal Theme",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyHolidayTheme",
+        "command": "colins-theme-switcher.applyHolidayTheme",
         "title": "Apply Current Holiday Theme",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.pickGamingTheme",
+        "command": "colins-theme-switcher.pickGamingTheme",
         "title": "Pick Gaming Theme",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.pickThemeByPack",
+        "command": "colins-theme-switcher.pickThemeByPack",
         "title": "Pick Theme By Pack",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.enableLightDarkAutoSwitch",
+        "command": "colins-theme-switcher.enableLightDarkAutoSwitch",
         "title": "Enable Light/Dark Auto Switch",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.enableMonthlyAutoTheme",
+        "command": "colins-theme-switcher.enableMonthlyAutoTheme",
         "title": "Enable Startup Seasonal Auto Theme",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.disableMonthlyAutoTheme",
+        "command": "colins-theme-switcher.disableMonthlyAutoTheme",
         "title": "Disable Startup Seasonal Auto Theme",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyOrangePreset",
+        "command": "colins-theme-switcher.applyOrangePreset",
         "title": "Apply Orange Coding Preset",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyFocusPreset",
+        "command": "colins-theme-switcher.applyFocusPreset",
         "title": "Apply Focus Preset",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyLightPreset",
+        "command": "colins-theme-switcher.applyLightPreset",
         "title": "Apply Light Coding Preset",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyGamingPreset",
+        "command": "colins-theme-switcher.applyGamingPreset",
         "title": "Apply Gaming Preset",
-        "category": "Colin's Theme Reactor"
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.enableThemeReactor",
-        "title": "Enable Theme Reactor",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.enableThemeSwitcher",
+        "title": "Enable Theme Switcher",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.disableThemeReactor",
-        "title": "Disable Theme Reactor",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.disableThemeSwitcher",
+        "title": "Disable Theme Switcher",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.applyThemeReactorNow",
-        "title": "Apply Theme Reactor Now",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.applyThemeSwitcherNow",
+        "title": "Apply Theme Switcher Now",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.pickReactorFavorite",
-        "title": "Pick Theme Reactor Favorite",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.pickSwitcherFavorite",
+        "title": "Pick Theme Switcher Favorite",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.randomReactorFavorite",
-        "title": "Random Theme Reactor Favorite",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.randomSwitcherFavorite",
+        "title": "Random Theme Switcher Favorite",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.configureReactorFavorites",
-        "title": "Configure Theme Reactor Favorites",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.configureSwitcherFavorites",
+        "title": "Configure Theme Switcher Favorites",
+        "category": "Colin's Theme Switcher"
       },
       {
-        "command": "theme-reactor.setReactorWorkspaceTheme",
-        "title": "Set Theme Reactor Workspace Theme",
-        "category": "Colin's Theme Reactor"
+        "command": "colins-theme-switcher.setSwitcherWorkspaceTheme",
+        "title": "Set Theme Switcher Workspace Theme",
+        "category": "Colin's Theme Switcher"
       }
     ],
     "configuration": {
-      "title": "Colin's Theme Reactor",
+      "title": "Colin's Theme Switcher",
       "properties": {
-        "themeReactor.autoApplyOnStartup": {
+        "colinsThemeSwitcher.autoApplyOnStartup": {
           "type": "boolean",
           "default": false,
           "description": "Apply a seasonal or holiday theme when VS Code starts."
         },
-        "themeReactor.autoMode": {
+        "colinsThemeSwitcher.autoMode": {
           "type": "string",
           "enum": [
             "seasonal",
@@ -174,12 +165,12 @@
           "default": "seasonal",
           "description": "Controls which automatic theme rotation is used on startup."
         },
-        "themeReactor.reactor.enabled": {
+        "colinsThemeSwitcher.switcher.enabled": {
           "type": "boolean",
           "default": false,
-          "description": "Automatically apply Theme Reactor when VS Code starts and while VS Code is open."
+          "description": "Automatically apply Theme Switcher when VS Code starts and while VS Code is open."
         },
-        "themeReactor.reactor.mode": {
+        "colinsThemeSwitcher.switcher.mode": {
           "type": "string",
           "enum": [
             "hybrid",
@@ -194,9 +185,9 @@
             "Use holiday themes when available, with seasonal fallback."
           ],
           "default": "hybrid",
-          "description": "Controls how Theme Reactor chooses a theme."
+          "description": "Controls how Theme Switcher chooses a theme."
         },
-        "themeReactor.reactor.schedule": {
+        "colinsThemeSwitcher.switcher.schedule": {
           "type": "object",
           "default": {
             "morning": "Spring Bloom",
@@ -207,9 +198,9 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Theme Reactor time-of-day schedule. Supported keys: morning, day, evening, night."
+          "description": "Theme Switcher time-of-day schedule. Supported keys: morning, day, evening, night."
         },
-        "themeReactor.reactor.favorites": {
+        "colinsThemeSwitcher.switcher.favorites": {
           "type": "array",
           "items": {
             "type": "string"
@@ -222,12 +213,12 @@
             "Winter Aurora",
             "Starfighter HUD"
           ],
-          "description": "Themes used by Theme Reactor favorite and random commands."
+          "description": "Themes used by Theme Switcher favorite and random commands."
         },
-        "themeReactor.reactor.workspaceTheme": {
+        "colinsThemeSwitcher.switcher.workspaceTheme": {
           "type": "string",
           "default": "",
-          "description": "Workspace-specific Theme Reactor override. Leave empty to use the normal Theme Reactor mode."
+          "description": "Workspace-specific Theme Switcher override. Leave empty to use the normal Theme Switcher mode."
         }
       }
     }

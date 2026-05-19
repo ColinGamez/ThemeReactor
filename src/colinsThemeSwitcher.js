@@ -90,8 +90,8 @@ function safeThemeList(themes, fallback = ALL_THEMES) {
   return normalized.length > 0 ? [...new Set(normalized)] : fallback;
 }
 
-function reactorSchedule(config) {
-  const schedule = config.get("reactor.schedule", {});
+function switcherSchedule(config) {
+  const schedule = config.get("switcher.schedule", {});
 
   if (!schedule || typeof schedule !== "object" || Array.isArray(schedule)) {
     return DEFAULT_REACTOR_SCHEDULE;
@@ -100,13 +100,13 @@ function reactorSchedule(config) {
   return { ...DEFAULT_REACTOR_SCHEDULE, ...schedule };
 }
 
-function reactorFavorites(config) {
-  return safeThemeList(config.get("reactor.favorites", DEFAULT_REACTOR_FAVORITES), DEFAULT_REACTOR_FAVORITES);
+function switcherFavorites(config) {
+  return safeThemeList(config.get("switcher.favorites", DEFAULT_REACTOR_FAVORITES), DEFAULT_REACTOR_FAVORITES);
 }
 
-function reactorTimeTheme(date = new Date()) {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  const schedule = reactorSchedule(config);
+function switcherTimeTheme(date = new Date()) {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  const schedule = switcherSchedule(config);
   const bucket = timeBucket(date);
 
   return {
@@ -115,9 +115,9 @@ function reactorTimeTheme(date = new Date()) {
   };
 }
 
-function reactorThemeForDate(date = new Date()) {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  const rawWorkspaceTheme = config.get("reactor.workspaceTheme", "");
+function switcherThemeForDate(date = new Date()) {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  const rawWorkspaceTheme = config.get("switcher.workspaceTheme", "");
   const workspaceTheme = typeof rawWorkspaceTheme === "string" ? rawWorkspaceTheme.trim() : "";
 
   if (workspaceTheme) {
@@ -128,7 +128,7 @@ function reactorThemeForDate(date = new Date()) {
     };
   }
 
-  const mode = config.get("reactor.mode", "hybrid");
+  const mode = config.get("switcher.mode", "hybrid");
 
   if (mode === "seasonal") {
     return monthTheme(date);
@@ -139,10 +139,10 @@ function reactorThemeForDate(date = new Date()) {
   }
 
   if (mode === "timeOfDay") {
-    return reactorTimeTheme(date);
+    return switcherTimeTheme(date);
   }
 
-  return isHolidayMonth(date) ? holidayTheme(date) : reactorTimeTheme(date);
+  return isHolidayMonth(date) ? holidayTheme(date) : switcherTimeTheme(date);
 }
 
 async function setTheme(label, detail, options = {}) {
@@ -151,7 +151,7 @@ async function setTheme(label, detail, options = {}) {
 
   if (currentTheme === label && !options.force) {
     if (!options.silent) {
-      vscode.window.showInformationMessage(`Colin's Theme Reactor: ${label} is already active.`);
+      vscode.window.showInformationMessage(`Colin's Theme Switcher: ${label} is already active.`);
     }
 
     return false;
@@ -162,7 +162,7 @@ async function setTheme(label, detail, options = {}) {
     .update("colorTheme", label, target);
 
   if (!options.silent) {
-    vscode.window.showInformationMessage(`Colin's Theme Reactor: switched to ${label}${detail ? ` (${detail})` : ""}.`);
+    vscode.window.showInformationMessage(`Colin's Theme Switcher: switched to ${label}${detail ? ` (${detail})` : ""}.`);
   }
 
   return true;
@@ -183,7 +183,7 @@ async function applySettingsPreset({ name, theme, minimap, renderWhitespace }) {
   await updateGlobal("editor", "guides.bracketPairs", "active");
   await updateGlobal("editor", "smoothScrolling", true);
   await updateGlobal("editor", "renderWhitespace", renderWhitespace);
-  vscode.window.showInformationMessage(`Colin's Theme Reactor: applied ${name}.`);
+  vscode.window.showInformationMessage(`Colin's Theme Switcher: applied ${name}.`);
 }
 
 async function applyOrangePreset() {
@@ -246,7 +246,7 @@ async function pickThemeFromPack(packName) {
 
 async function pickThemeByPack() {
   const pack = await vscode.window.showQuickPick(Object.keys(PACKS), {
-    title: "Pick a Colin's Theme Reactor pack",
+    title: "Pick a Colin's Theme Switcher pack",
     placeHolder: "Choose a pack"
   });
 
@@ -265,93 +265,93 @@ async function enableLightDarkAutoSwitch() {
   await vscode.workspace
     .getConfiguration("workbench")
     .update("preferredDarkColorTheme", "All Orange", vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Reactor: enabled VS Code light/dark auto switching.");
+  vscode.window.showInformationMessage("Colin's Theme Switcher: enabled VS Code light/dark auto switching.");
 }
 
 async function enableMonthlyAutoTheme() {
   await vscode.workspace
-    .getConfiguration("themeReactor")
+    .getConfiguration("colinsThemeSwitcher")
     .update("autoApplyOnStartup", true, vscode.ConfigurationTarget.Global);
   await vscode.workspace
-    .getConfiguration("themeReactor")
+    .getConfiguration("colinsThemeSwitcher")
     .update("autoMode", "seasonal", vscode.ConfigurationTarget.Global);
   await applySeasonalTheme();
 }
 
 async function disableMonthlyAutoTheme() {
   await vscode.workspace
-    .getConfiguration("themeReactor")
+    .getConfiguration("colinsThemeSwitcher")
     .update("autoApplyOnStartup", false, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Reactor: startup auto theme is off.");
+  vscode.window.showInformationMessage("Colin's Theme Switcher: startup auto theme is off.");
 }
 
-async function applyThemeReactor(options = {}) {
-  const theme = reactorThemeForDate();
-  return setTheme(theme.label, `Theme Reactor ${theme.detail}`, {
+async function applyThemeSwitcher(options = {}) {
+  const theme = switcherThemeForDate();
+  return setTheme(theme.label, `Theme Switcher ${theme.detail}`, {
     ...options,
     target: theme.target ?? options.target
   });
 }
 
-async function applyThemeReactorIfEnabled(options = {}) {
-  const config = vscode.workspace.getConfiguration("themeReactor");
+async function applyThemeSwitcherIfEnabled(options = {}) {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
 
-  if (!config.get("reactor.enabled", false)) {
+  if (!config.get("switcher.enabled", false)) {
     return false;
   }
 
-  return applyThemeReactor(options);
+  return applyThemeSwitcher(options);
 }
 
-async function enableThemeReactor() {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  await config.update("reactor.enabled", true, vscode.ConfigurationTarget.Global);
+async function enableThemeSwitcher() {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  await config.update("switcher.enabled", true, vscode.ConfigurationTarget.Global);
 
-  if (!config.get("reactor.mode")) {
-    await config.update("reactor.mode", "hybrid", vscode.ConfigurationTarget.Global);
+  if (!config.get("switcher.mode")) {
+    await config.update("switcher.mode", "hybrid", vscode.ConfigurationTarget.Global);
   }
 
-  const changed = await applyThemeReactor({ silent: true });
-  const theme = reactorThemeForDate();
+  const changed = await applyThemeSwitcher({ silent: true });
+  const theme = switcherThemeForDate();
   vscode.window.showInformationMessage(
-    `Colin's Theme Reactor is on: ${theme.label}${changed ? "" : " was already active"}.`
+    `Colin's Theme Switcher is on: ${theme.label}${changed ? "" : " was already active"}.`
   );
 }
 
-async function disableThemeReactor() {
+async function disableThemeSwitcher() {
   await vscode.workspace
-    .getConfiguration("themeReactor")
-    .update("reactor.enabled", false, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage("Colin's Theme Reactor is off.");
+    .getConfiguration("colinsThemeSwitcher")
+    .update("switcher.enabled", false, vscode.ConfigurationTarget.Global);
+  vscode.window.showInformationMessage("Colin's Theme Switcher is off.");
 }
 
-async function applyThemeReactorNow() {
-  await applyThemeReactor();
+async function applyThemeSwitcherNow() {
+  await applyThemeSwitcher();
 }
 
-async function pickReactorFavorite() {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  const themes = reactorFavorites(config);
+async function pickSwitcherFavorite() {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  const themes = switcherFavorites(config);
   const choice = await vscode.window.showQuickPick(
-    themes.map((label) => ({ label, description: "Theme Reactor favorite" })),
-    { title: "Pick a Theme Reactor favorite", placeHolder: "Choose a favorite theme" }
+    themes.map((label) => ({ label, description: "Theme Switcher favorite" })),
+    { title: "Pick a Theme Switcher favorite", placeHolder: "Choose a favorite theme" }
   );
 
   if (choice) {
-    await setTheme(choice.label, "Theme Reactor favorite");
+    await setTheme(choice.label, "Theme Switcher favorite");
   }
 }
 
-async function randomReactorFavorite() {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  const themes = reactorFavorites(config);
+async function randomSwitcherFavorite() {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  const themes = switcherFavorites(config);
   const label = themes[Math.floor(Math.random() * themes.length)];
-  await setTheme(label, "Theme Reactor random favorite");
+  await setTheme(label, "Theme Switcher random favorite");
 }
 
-async function configureReactorFavorites() {
-  const config = vscode.workspace.getConfiguration("themeReactor");
-  const favorites = new Set(reactorFavorites(config));
+async function configureSwitcherFavorites() {
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
+  const favorites = new Set(switcherFavorites(config));
   const choices = await vscode.window.showQuickPick(
     ALL_THEMES.map((label) => ({
       label,
@@ -359,7 +359,7 @@ async function configureReactorFavorites() {
     })),
     {
       canPickMany: true,
-      title: "Configure Theme Reactor favorites",
+      title: "Configure Theme Switcher favorites",
       placeHolder: "Pick themes for random/favorite commands"
     }
   );
@@ -369,25 +369,25 @@ async function configureReactorFavorites() {
   }
 
   await config.update(
-    "reactor.favorites",
+    "switcher.favorites",
     choices.map((choice) => choice.label),
     vscode.ConfigurationTarget.Global
   );
-  vscode.window.showInformationMessage(`Colin's Theme Reactor: saved ${choices.length} favorites.`);
+  vscode.window.showInformationMessage(`Colin's Theme Switcher: saved ${choices.length} favorites.`);
 }
 
-async function setReactorWorkspaceTheme() {
+async function setSwitcherWorkspaceTheme() {
   if (!vscode.workspace.workspaceFolders?.length) {
-    vscode.window.showWarningMessage("Open a workspace or folder before setting a Theme Reactor workspace theme.");
+    vscode.window.showWarningMessage("Open a workspace or folder before setting a Theme Switcher workspace theme.");
     return;
   }
 
   const choices = [
-    { label: "Clear workspace theme", description: "Use the normal Theme Reactor mode", theme: "" },
+    { label: "Clear workspace theme", description: "Use the normal Theme Switcher mode", theme: "" },
     ...ALL_THEMES.map((label) => ({ label, description: "Use in this workspace", theme: label }))
   ];
   const choice = await vscode.window.showQuickPick(choices, {
-    title: "Set Theme Reactor workspace theme",
+    title: "Set Theme Switcher workspace theme",
     placeHolder: "Choose the theme this workspace should use"
   });
 
@@ -396,25 +396,25 @@ async function setReactorWorkspaceTheme() {
   }
 
   await vscode.workspace
-    .getConfiguration("themeReactor")
-    .update("reactor.workspaceTheme", choice.theme, vscode.ConfigurationTarget.Workspace);
+    .getConfiguration("colinsThemeSwitcher")
+    .update("switcher.workspaceTheme", choice.theme, vscode.ConfigurationTarget.Workspace);
 
   if (!choice.theme) {
-    vscode.window.showInformationMessage("Colin's Theme Reactor: cleared this workspace theme.");
+    vscode.window.showInformationMessage("Colin's Theme Switcher: cleared this workspace theme.");
     return;
   }
 
-  await setTheme(choice.theme, "Theme Reactor workspace theme", {
+  await setTheme(choice.theme, "Theme Switcher workspace theme", {
     force: true,
     target: vscode.ConfigurationTarget.Workspace
   });
 }
 
 async function applyConfiguredStartupTheme() {
-  const config = vscode.workspace.getConfiguration("themeReactor");
+  const config = vscode.workspace.getConfiguration("colinsThemeSwitcher");
 
-  if (config.get("reactor.enabled", false)) {
-    await applyThemeReactor({ silent: true });
+  if (config.get("switcher.enabled", false)) {
+    await applyThemeSwitcher({ silent: true });
     return;
   }
 
@@ -430,48 +430,48 @@ async function applyConfiguredStartupTheme() {
   await applySeasonalTheme();
 }
 
-function watchThemeReactor(context) {
+function watchThemeSwitcher(context) {
   const timer = setInterval(() => {
-    runExtensionTask(applyThemeReactorIfEnabled({ silent: true }), "Theme Reactor interval update");
+    runExtensionTask(applyThemeSwitcherIfEnabled({ silent: true }), "Theme Switcher interval update");
   }, REACTOR_INTERVAL_MS);
 
   context.subscriptions.push({ dispose: () => clearInterval(timer) });
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
-      if (event.affectsConfiguration("themeReactor.reactor")) {
-        runExtensionTask(applyThemeReactorIfEnabled({ silent: true }), "Theme Reactor configuration update");
+      if (event.affectsConfiguration("colinsThemeSwitcher.switcher")) {
+        runExtensionTask(applyThemeSwitcherIfEnabled({ silent: true }), "Theme Switcher configuration update");
       }
     })
   );
 }
 
-function registerThemeReactor(context) {
+function registerThemeSwitcher(context) {
   context.subscriptions.push(
-    vscode.commands.registerCommand("theme-reactor.applySeasonalTheme", applySeasonalTheme),
-    vscode.commands.registerCommand("theme-reactor.applyHolidayTheme", applyHolidayTheme),
-    vscode.commands.registerCommand("theme-reactor.pickGamingTheme", () => pickThemeFromPack("Gaming")),
-    vscode.commands.registerCommand("theme-reactor.pickThemeByPack", pickThemeByPack),
-    vscode.commands.registerCommand("theme-reactor.enableLightDarkAutoSwitch", enableLightDarkAutoSwitch),
-    vscode.commands.registerCommand("theme-reactor.enableMonthlyAutoTheme", enableMonthlyAutoTheme),
-    vscode.commands.registerCommand("theme-reactor.disableMonthlyAutoTheme", disableMonthlyAutoTheme),
-    vscode.commands.registerCommand("theme-reactor.applyOrangePreset", applyOrangePreset),
-    vscode.commands.registerCommand("theme-reactor.applyFocusPreset", applyFocusPreset),
-    vscode.commands.registerCommand("theme-reactor.applyLightPreset", applyLightPreset),
-    vscode.commands.registerCommand("theme-reactor.applyGamingPreset", applyGamingPreset),
-    vscode.commands.registerCommand("theme-reactor.enableThemeReactor", enableThemeReactor),
-    vscode.commands.registerCommand("theme-reactor.disableThemeReactor", disableThemeReactor),
-    vscode.commands.registerCommand("theme-reactor.applyThemeReactorNow", applyThemeReactorNow),
-    vscode.commands.registerCommand("theme-reactor.pickReactorFavorite", pickReactorFavorite),
-    vscode.commands.registerCommand("theme-reactor.randomReactorFavorite", randomReactorFavorite),
-    vscode.commands.registerCommand("theme-reactor.configureReactorFavorites", configureReactorFavorites),
-    vscode.commands.registerCommand("theme-reactor.setReactorWorkspaceTheme", setReactorWorkspaceTheme)
+    vscode.commands.registerCommand("colins-theme-switcher.applySeasonalTheme", applySeasonalTheme),
+    vscode.commands.registerCommand("colins-theme-switcher.applyHolidayTheme", applyHolidayTheme),
+    vscode.commands.registerCommand("colins-theme-switcher.pickGamingTheme", () => pickThemeFromPack("Gaming")),
+    vscode.commands.registerCommand("colins-theme-switcher.pickThemeByPack", pickThemeByPack),
+    vscode.commands.registerCommand("colins-theme-switcher.enableLightDarkAutoSwitch", enableLightDarkAutoSwitch),
+    vscode.commands.registerCommand("colins-theme-switcher.enableMonthlyAutoTheme", enableMonthlyAutoTheme),
+    vscode.commands.registerCommand("colins-theme-switcher.disableMonthlyAutoTheme", disableMonthlyAutoTheme),
+    vscode.commands.registerCommand("colins-theme-switcher.applyOrangePreset", applyOrangePreset),
+    vscode.commands.registerCommand("colins-theme-switcher.applyFocusPreset", applyFocusPreset),
+    vscode.commands.registerCommand("colins-theme-switcher.applyLightPreset", applyLightPreset),
+    vscode.commands.registerCommand("colins-theme-switcher.applyGamingPreset", applyGamingPreset),
+    vscode.commands.registerCommand("colins-theme-switcher.enableThemeSwitcher", enableThemeSwitcher),
+    vscode.commands.registerCommand("colins-theme-switcher.disableThemeSwitcher", disableThemeSwitcher),
+    vscode.commands.registerCommand("colins-theme-switcher.applyThemeSwitcherNow", applyThemeSwitcherNow),
+    vscode.commands.registerCommand("colins-theme-switcher.pickSwitcherFavorite", pickSwitcherFavorite),
+    vscode.commands.registerCommand("colins-theme-switcher.randomSwitcherFavorite", randomSwitcherFavorite),
+    vscode.commands.registerCommand("colins-theme-switcher.configureSwitcherFavorites", configureSwitcherFavorites),
+    vscode.commands.registerCommand("colins-theme-switcher.setSwitcherWorkspaceTheme", setSwitcherWorkspaceTheme)
   );
 
-  watchThemeReactor(context);
+  watchThemeSwitcher(context);
 
   setTimeout(() => {
     runExtensionTask(applyConfiguredStartupTheme(), "startup theme apply");
   }, 1200);
 }
 
-module.exports = { registerThemeReactor };
+module.exports = { registerThemeSwitcher };

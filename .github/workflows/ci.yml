@@ -37,5 +37,5 @@ jobs:
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: theme-reactor-vsix
+          name: colins-theme-switcher-vsix
           path: "*.vsix"

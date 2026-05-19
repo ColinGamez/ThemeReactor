@@ -1,7 +1,7 @@
-const { registerThemeReactor } = require("./src/themeReactor");
+const { registerThemeSwitcher } = require("./src/colinsThemeSwitcher");
 
 function activate(context) {
-  registerThemeReactor(context);
+  registerThemeSwitcher(context);
 }
 
 function deactivate() {}

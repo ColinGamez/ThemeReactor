@@ -1,7 +1,7 @@
 # Support
 
-Thanks for using Colin's Theme Reactor.
+Thanks for using Colin's Theme Switcher.
 
-- Issues: https://github.com/ColinGamez/ThemeReactor/issues
-- Releases: https://github.com/ColinGamez/ThemeReactor/releases
+- Issues: Use the GitHub Issues tab for this repository.
+- Releases: Use the GitHub Releases tab for this repository.
 - Publisher: ColinGamez

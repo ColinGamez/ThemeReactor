@@ -57,9 +57,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view "v${{ inputs.version }}" >/dev/null 2>&1; then
-            gh release upload "v${{ inputs.version }}" "theme-reactor-${{ inputs.version }}.vsix" --clobber
+            gh release upload "v${{ inputs.version }}" "colins-theme-switcher-${{ inputs.version }}.vsix" --clobber
           else
-            gh release create "v${{ inputs.version }}" "theme-reactor-${{ inputs.version }}.vsix" \
+            gh release create "v${{ inputs.version }}" "colins-theme-switcher-${{ inputs.version }}.vsix" \
               --target "${{ github.sha }}" \
               --title "v${{ inputs.version }}" \
               --generate-notes
@@ -69,4 +69,4 @@ jobs:
         if: ${{ inputs.publish_marketplace }}
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: npx @vscode/vsce publish --packagePath "theme-reactor-${{ inputs.version }}.vsix" -p "$VSCE_PAT"
+        run: npx @vscode/vsce publish --packagePath "colins-theme-switcher-${{ inputs.version }}.vsix" -p "$VSCE_PAT"

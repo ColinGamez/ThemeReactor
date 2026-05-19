@@ -2,9 +2,9 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
-const expectedName = "theme-reactor";
-const expectedCommands = ["theme-reactor.applySeasonalTheme","theme-reactor.applyHolidayTheme","theme-reactor.pickGamingTheme","theme-reactor.pickThemeByPack","theme-reactor.enableLightDarkAutoSwitch","theme-reactor.enableMonthlyAutoTheme","theme-reactor.disableMonthlyAutoTheme","theme-reactor.applyOrangePreset","theme-reactor.applyFocusPreset","theme-reactor.applyLightPreset","theme-reactor.applyGamingPreset","theme-reactor.enableThemeReactor","theme-reactor.disableThemeReactor","theme-reactor.applyThemeReactorNow","theme-reactor.pickReactorFavorite","theme-reactor.randomReactorFavorite","theme-reactor.configureReactorFavorites","theme-reactor.setReactorWorkspaceTheme"];
-const files = ["extension.js","src/themeReactor.js","src/themeData.js","src/utils.js"];
+const expectedName = "colins-theme-switcher";
+const expectedCommands = ["colins-theme-switcher.applySeasonalTheme","colins-theme-switcher.applyHolidayTheme","colins-theme-switcher.pickGamingTheme","colins-theme-switcher.pickThemeByPack","colins-theme-switcher.enableLightDarkAutoSwitch","colins-theme-switcher.enableMonthlyAutoTheme","colins-theme-switcher.disableMonthlyAutoTheme","colins-theme-switcher.applyOrangePreset","colins-theme-switcher.applyFocusPreset","colins-theme-switcher.applyLightPreset","colins-theme-switcher.applyGamingPreset","colins-theme-switcher.enableThemeSwitcher","colins-theme-switcher.disableThemeSwitcher","colins-theme-switcher.applyThemeSwitcherNow","colins-theme-switcher.pickSwitcherFavorite","colins-theme-switcher.randomSwitcherFavorite","colins-theme-switcher.configureSwitcherFavorites","colins-theme-switcher.setSwitcherWorkspaceTheme"];
+const files = ["extension.js","src/colinsThemeSwitcher.js","src/themeData.js","src/utils.js"];
 
 if (pkg.name !== expectedName) {
   throw new Error(`package name must be ${expectedName}`);
@@ -21,4 +21,4 @@ for (const file of files) {
   execFileSync(process.execPath, ["--check", file], { stdio: "inherit" });
 }
 
-console.log("Colin's Theme Reactor package check passed.");
+console.log("Colin's Theme Switcher package check passed.");
